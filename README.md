@@ -1,21 +1,49 @@
-# Metri
+Fetches or ingests Prometheus metrics into SQLite.
 
-**TODO: Add description**
+Your ideas are welcome [here.](https://github.com/ruslandoga/metri/issues/1)
 
-## Installation
+<details>
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `metri` to your list of dependencies in `mix.exs`:
+<summary>Current schema</summary>
 
-```elixir
-def deps do
-  [
-    {:metri, "~> 0.1.0"}
-  ]
-end
+```sql
+CREATE TABLE samples(name TEXT, labels JSON, timestamp INTEGER, value REAL);
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/metri>.
+```sql
+select * from samples limit 4;
+```
 
+```
+┌─────────────────────┬────────────────────────────────┬───────────────┬────────┐
+│        name         │             labels             │   timestamp   │ value  │
+├─────────────────────┼────────────────────────────────┼───────────────┼────────┤
+│ http_requests_total │ {"code":"200","method":"post"} │ 1641038400000 │ 1027.0 │
+│ http_requests_total │ {"code":"400","method":"post"} │ 1641038400000 │ 3.0    │
+│ http_requests_total │ {"code":"200","method":"post"} │ 1641060000000 │ 2143.0 │
+│ http_requests_total │ {"code":"400","method":"post"} │ 1641060000000 │ 12.0   │
+└─────────────────────┴────────────────────────────────┴───────────────┴────────┘
+```
+
+Example query:
+
+```sql
+select
+  datetime(timestamp / 1000, 'unixepoch') as datetime,
+  avg(value) as avg
+from samples
+where
+  name = 'http_requests_total' and
+  json_extract(labels, '$.code') = '400'
+group by 1;
+```
+
+```
+┌────────────┬─────┐
+│    date    │ avg │
+├────────────┼─────┤
+│ 2022-01-01 │ 7.5 │
+└────────────┴─────┘
+```
+
+</details>
