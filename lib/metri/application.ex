@@ -5,8 +5,8 @@ defmodule Metri.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      Metri.Repo,
-      %{id: :cache, start: {__MODULE__, :start_cache, []}}
+      # Metri.Repo,
+      # %{id: :cache, start: {__MODULE__, :start_cache, []}}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: Metri.Supervisor)
