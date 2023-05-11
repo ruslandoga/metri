@@ -58,26 +58,69 @@ group by 1;
 
 All configuration happens via environment variables:
 
-- `TARGETS` sets the URLs to scrape, separated by a comma: `TARGETS=http://localhost:8000/metrics,http://10.0.1.12:4000/.well-known/metrics`
+- `TARGETS` sets the URLs to scrape, separated by a comma
+  
+  ```console
+  $ TARGETS=https://metri.fly.dev/metrics,http://localhost:4000/metrics
+  ```
+  
 - `PORT` sets the port to listen on
+  
+  ```console
+  $ PORT=4000
+  ```
+  
+- `METRICS_PORT` (optional) sets the port to export metrics on
+  
+  ```console
+  $ METRICS_PORT=4000
+  ```
+  
+- `METRICS_PATH` (optional) sets the path to export metrics on
+
+  ```console
+  $ METRICS_PATH=/metrics
+  ```
+  
 - `HOST` sets the hostname (used in links and origin checks)
+  
+  ```console
+  $ HOST=localhost
+  ```
+  
 - `DATABASE_PATH` sets the path to the SQLite database
+
+  ```console
+  $ DATABASE_PATH=/data/metrics.db
+  ```
+  
 - `USERNAME` sets basic auth username
+
+  ```console
+  $ USERNAME=username
+  ```
+
 - `PASSWORD` sets basic auth password
+  
+  ```console
+  $ PASSWORD=password
+  ```
+  
 - `PHX_SECRET_KEY` sets Phoenix secret key
+
+  ```console
+  $ PHX_SECRET_KEY=$(openssl rand -base64 64 | tr -d '\n')
+  ```
 
 Example `docker run` command:
 
-```console
-$ PHX_SECRET_KEY=$(openssl rand -base64 64 | tr -d '\n')
-$ TARGETS=http://localhost:4000/metrics
-$ PORT=4000
-$ HOST=localhost
-$ DATABASE_PATH=/data/metrics.db
-$ USERNAME=username
-$ PASSWORD=password
-$ docker run -ti --rm -v metri_data:/data -p 4000:4000 -e $URLS -e $PORT -e $HOST -e $DATABASE_PATH -e $PHX_SECRET_KEY -e $USERNAME -e $PASSWORD ghcr.io/ruslandoga/metri
-$ open http://localhost:4000
+```
+$ docker run \
+  -ti --rm -v metri_data:/data -p 4000:4000 \
+  -e $TARGETS -e $PORT -e $METRICS_PORT -e $METRICS_PATH -e $HOST -e $DATABASE_PATH -e $PHX_SECRET_KEY -e $USERNAME -e $PASSWORD \
+  ghcr.io/ruslandoga/metri:master
+
+$ open http://localhost:4000/explore
 ```
 
 </details>
