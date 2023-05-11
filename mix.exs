@@ -28,6 +28,7 @@ defmodule Metri.MixProject do
   defp deps do
     [
       {:ecto_sqlite3, "~> 0.10.1"},
+      {:jason, "~> 1.4"},
       {:benchee, "~> 1.1", only: [:bench]}
     ]
   end
