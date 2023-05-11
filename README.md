@@ -120,7 +120,9 @@ $ docker run \
   -e $TARGETS -e $PORT -e $METRICS_PORT -e $METRICS_PATH -e $HOST -e $DATABASE_PATH -e $PHX_SECRET_KEY -e $USERNAME -e $PASSWORD \
   ghcr.io/ruslandoga/metri:master
 
-$ open http://localhost:4000/explore
+$ curl -H 'accept: text/csv' -H 'Basic: ...' -http://localhost:4000/query -d 'select distinct name from samples'
+
+$ curl -H 'accept: text/csv' -H 'Basic: ...' -http://localhost:4000/query -d 'select ' | youplot barplot
 ```
 
 </details>
