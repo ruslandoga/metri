@@ -8,6 +8,7 @@ defmodule Metri.MixProject do
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      releases: releases(),
       deps: deps()
     ]
   end
@@ -29,7 +30,12 @@ defmodule Metri.MixProject do
     [
       {:ecto_sqlite3, "~> 0.10.1"},
       {:jason, "~> 1.4"},
-      {:benchee, "~> 1.1", only: [:bench]}
+      {:benchee, "~> 1.1", only: [:bench]},
+      {:finch, "~> 0.16.0"}
     ]
+  end
+
+  defp releases do
+    [metri: [include_executables_for: [:unix]]]
   end
 end

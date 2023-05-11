@@ -37,7 +37,7 @@ defmodule Metri.NaiveTest do
         %{sample | labels: Jason.encode!(labels)}
       end)
 
-    Repo.insert_all("naive_metrics", samples)
+    Repo.insert_all("samples", samples)
   end
 
   test "insert" do
@@ -52,15 +52,15 @@ defmodule Metri.NaiveTest do
 
     test "basic" do
       sql = """
-      select timestamp, value
-        from naive_metrics
+      select datetime(timestamp / 1000, 'unixepoch'), value
+        from samples
         where name = 'http_requests_total' and
               json_extract(labels, '$.code') = '400'
       """
 
       assert Repo.query!(sql).rows == [
-               [1_641_038_400_000, 3.0],
-               [1_641_060_000_000, 12.0]
+               ["2022-01-01 12:00:00", 3.0],
+               ["2022-01-01 18:00:00", 12.0]
              ]
     end
   end
