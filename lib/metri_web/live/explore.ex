@@ -1,4 +1,4 @@
-defmodule MetriWeb.DashboardLive do
+defmodule MetriWeb.ExploreLive do
   use MetriWeb, :live_view
 
   @impl true

@@ -17,6 +17,6 @@ defmodule MetriWeb.Router do
   scope "/", MetriWeb do
     pipe_through :browser
 
-    live "/", DashboardLive, :index
+    live "/", ExploreLive, :index
   end
 end
